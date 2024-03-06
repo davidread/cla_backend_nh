@@ -1,0 +1,52 @@
+# Default values for cla-backend in a dev environment.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+environment: "development"
+image:
+  repository: cla_backend_local
+  tag: latest
+  pullPolicy: IfNotPresent
+
+localPostgres:
+  enabled: true
+
+service:
+  type: NodePort
+  port: 80
+
+ingress:
+  enabled: false
+
+# Lists don't deep merge, so this list of envVars overrides anything defined in an earlier values file
+envVars:
+  DEBUG:
+    value: "True"
+  LOAD_SEED_DATA:
+    value: "True"
+  LOAD_TEST_DATA:
+    value: "True"
+  LOAD_END_TO_END_FIXTURES:
+    value: "True"
+  ADMIN_USER:
+    value: "admin"
+    secret: null
+  ADMIN_PASSWORD:
+    secret: null
+    value: "admin"
+  DB_HOST:
+    secret:
+      optional: true
+  DB_PORT:
+    secret:
+      name: database
+      key: port
+      optional: true
+  REPLICA_DB_HOST:
+    secret:
+      optional: true
+  FRONTEND_HOST_NAME:
+    value: ~
+  MIGRATE_OAUTH_DATA:
+    value: "False"
+  CFE_HOST:
+    value: "http://cfe-civil.cfe-civil-staging.svc.cluster.local"

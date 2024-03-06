@@ -1,0 +1,75 @@
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+test-reports
+
+# Translations
+*.mo
+*.pot
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# Complexity
+output/*.html
+output/*/index.html
+
+# Sphinx
+docs/_build
+
+.webassets-cache
+
+# Virtualenvs
+env
+env*
+venv
+
+# intellij
+*.ipr
+*.iml
+*.iws
+
+cla_backend/settings/local.py
+
+# collect static output directory
+cla_backend/static/
+
+.DS_Store
+
+# PyCharm
+.idea
+
+# VS Code
+.vscode*
+
+# pyenv
+.python-version
+/cla_backend/apps/knowledgebase/fixtures/kb_from_spreadsheet.json
+/celerybeat-schedule.dir
+/celerybeat-schedule.pag
+/.bash_history

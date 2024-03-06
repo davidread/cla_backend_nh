@@ -1,0 +1,84 @@
+[
+    {
+        "pk": 1,
+        "model": "auth.group",
+        "fields": {
+            "name": "Operator Managers",
+            "permissions": [
+                ["add_operator", "call_centre", "operator"],
+                ["change_operator", "call_centre", "operator"],
+                ["run_reports", "legalaid", "case"],
+                ["add_article", "knowledgebase", "article"],
+                ["change_article", "knowledgebase", "article"],
+                ["change_articlecategorymatrix", "knowledgebase", "articlecategorymatrix"],
+                ["add_articlecategorymatrix", "knowledgebase", "articlecategorymatrix"],
+                ["delete_articlecategorymatrix", "knowledgebase", "articlecategorymatrix"],
+                ["add_notification", "notifications", "notification"],
+                ["change_notification", "notifications", "notification"],
+                ["delete_notification", "notifications", "notification"]
+            ]
+        }
+    },
+    {
+        "pk": 2,
+        "model": "auth.group",
+        "fields": {
+            "name": "CLA Superusers",
+            "permissions": [
+                ["add_operator", "call_centre", "operator"],
+                ["change_operator", "call_centre", "operator"],
+                ["add_caseworker", "call_centre", "caseworker"],
+                ["change_caseworker", "call_centre", "caseworker"],
+                ["add_staff", "cla_provider", "staff"],
+                ["change_staff", "cla_provider", "staff"],
+                ["add_provider", "cla_provider", "provider"],
+                ["change_provider", "cla_provider", "provider"],
+                ["add_providerallocation", "cla_provider", "providerallocation"],
+                ["change_providerallocation", "cla_provider", "providerallocation"],
+                ["delete_providerallocation", "cla_provider", "providerallocation"],
+                ["run_reports", "legalaid", "case"],
+                ["add_article", "knowledgebase", "article"],
+                ["change_article", "knowledgebase", "article"],
+                ["change_articlecategorymatrix", "knowledgebase", "articlecategorymatrix"],
+                ["add_articlecategorymatrix", "knowledgebase", "articlecategorymatrix"],
+                ["delete_articlecategorymatrix", "knowledgebase", "articlecategorymatrix"],
+                ["change_note", "guidance", "note"],
+                ["add_note", "guidance", "note"],
+                ["delete_note", "guidance", "note"],
+                ["change_notetagrelation", "guidance", "notetagrelation"],
+                ["add_notetagrelation", "guidance", "notetagrelation"],
+                ["delete_notetagrelation", "guidance", "notetagrelation"],
+                ["change_tag", "guidance", "tag"],
+                ["add_tag", "guidance", "tag"],
+                ["delete_tag", "guidance", "tag"],
+                ["add_telephonenumber", "knowledgebase", "telephonenumber"],
+                ["change_telephonenumber", "knowledgebase", "telephonenumber"],
+                ["delete_telephonenumber", "knowledgebase", "telephonenumber"],
+                ["change_reasonforcontacting", "checker", "reasonforcontacting"],
+                ["add_notification", "notifications", "notification"],
+                ["change_notification", "notifications", "notification"],
+                ["delete_notification", "notifications", "notification"]
+            ]
+        }
+    },
+  {
+        "pk": 3,
+        "model": "auth.group",
+        "fields": {
+            "name": "LAA Caseworker",
+            "permissions": [
+              ["run_reports", "legalaid", "case"]
+            ]
+        }
+    },
+  {
+        "pk": 4,
+        "model": "auth.group",
+        "fields": {
+            "name": "LAA OBIEE",
+            "permissions": [
+              ["run_obiee_reports", "legalaid", "case"]
+            ]
+        }
+    }
+]

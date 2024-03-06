@@ -1,0 +1,125 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-house-keeping
+  labels:
+    {{- include "cla-backend.labels" . | nindent 4 }}
+spec:
+  schedule: "0 5 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: housekeeping
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            command: ["python", "manage.py", "housekeeping"]
+            env:
+              {{ include "cla-backend.app.vars" . | nindent 12 }}
+          serviceAccountName: {{ include "cla-backend.serviceAccountName" . }}
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-missing-codes
+  labels:
+    {{- include "cla-backend.labels" . | nindent 4 }}
+spec:
+  schedule: "15 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: run-command
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            command: ["python", "manage.py", "monitor_missing_outcome_codes"]
+            env:
+              {{ include "cla-backend.app.vars" . | nindent 12 }}
+          serviceAccountName: {{ include "cla-backend.serviceAccountName" . }}
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-mi-cb1-report
+  labels:
+    {{- include "cla-backend.labels" . | nindent 4 }}
+spec:
+  schedule: "0 5 * * 0"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: reporting
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            command: ["python", "manage.py", "mi_cb1_report"]
+            env:
+              {{ include "cla-backend.app.vars" . | nindent 12 }}
+          serviceAccountName: {{ include "cla-backend.serviceAccountName" . }}
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-delete-unused-cases
+  labels:
+    {{- include "cla-backend.labels" . | nindent 4 }}
+spec:
+  schedule: "0 5 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: delete-unused-cases
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            command: ["python", "manage.py", "delete_cases_without_personal_data"]
+            env:
+              {{ include "cla-backend.app.vars" . | nindent 12 }}
+          serviceAccountName: {{ include "cla-backend.serviceAccountName" . }}
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-fix-outcome-codes
+  labels:
+    {{- include "cla-backend.labels" . | nindent 4 }}
+spec:
+  schedule: "0 5 3 * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: fix-missing-outcome-codes
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            command: ["python", "manage.py", "fix_missing_outcome_codes"]
+            env:
+              {{ include "cla-backend.app.vars" . | nindent 12 }}
+          serviceAccountName: {{ include "cla-backend.serviceAccountName" . }}
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-remove-expired-reports
+  labels:
+    {{- include "cla-backend.labels" . | nindent 4 }}
+spec:
+  schedule: "0 1 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: remove-expired-reports
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            command: ["python", "manage.py", "remove_expired_reports"]
+            env:
+              {{ include "cla-backend.app.vars" . | nindent 12 }}
+          serviceAccountName: {{ include "cla-backend.serviceAccountName" . }}
+          restartPolicy: OnFailure

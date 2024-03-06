@@ -1,0 +1,36 @@
+{{- if .Values.queueWorkers.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cla-backend.fullname" . }}-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "cla-backend.fullname" . }}-worker
+  template:
+    metadata:
+      labels:
+        app: {{ include "cla-backend.fullname" . }}-worker
+    spec:
+      serviceAccountName: {{ include "cla-backend.serviceAccountName" . }}
+      containers:
+        - name: {{ include "cla-backend.fullname" . }}-worker
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["docker/run_worker.sh"]
+          env:
+            {{ include "cla-backend.app.vars" . | nindent 12 }}
+          readinessProbe:
+            exec:
+              command: ["python", "manage.py", "worker_probes"]
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command: ["python", "manage.py", "worker_probes"]
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+            periodSeconds: 10
+{{- end }}

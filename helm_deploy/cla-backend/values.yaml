@@ -1,0 +1,244 @@
+# Default values for cla-backend.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 8
+environment: "prod"
+image:
+  repository: cla_backend
+  tag: latest
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: irsa-sevice-account
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+host: 'localhost'
+
+ingress:
+  enabled: true
+  annotations: {}
+  cluster:
+    name: ~
+    weight: ~
+  whitelist:
+    # MoJ Digital Wifi & Digital VPN
+    - 81.134.202.29/32
+    # MoJ/LAA
+    - 52.17.239.55/32
+    - 62.25.109.201/32
+    - 62.25.109.203/32
+    # ATOS datacentre
+    - 157.203.176.0/24
+    - 157.203.177.0/24
+    # LAA Manchester/32
+    - 62.25.109.201/32
+    - 62.25.109.203/32
+    - 31.97.19.127/32
+    - 31.67.24.68/32
+    # ARK Data Center IP ranges.
+    - 194.33.192.0/25
+    - 194.33.196.0/25
+    # Kubernetes - live0
+    - 34.247.134.240/32
+    - 34.251.93.81/32
+    - 52.17.133.167/32
+    # Kubernetes - live1
+    - 35.178.209.113/32
+    - 3.8.51.207/32
+    - 35.177.252.54/32
+    - 3.11.49.71/32
+    - 18.130.126.34/32
+    - 18.134.21.79/32
+    # HGS, new Civil Legal Aid call centre provider from Autumn 2019
+    - 213.78.108.84/32
+    - 84.43.86.100/32
+    - 185.38.246.208/32
+    - 185.91.131.4/32
+    # CHS
+    - 52.210.114.89/32
+    # GlobalProtect VPN (Digital Mac)
+    - 18.169.147.172/32
+    - 35.176.93.186/32
+    - 18.130.148.126/32
+    - 35.176.148.126/32
+
+localPostgres:
+  enabled: false
+
+queueWorkers:
+  enabled: true
+
+envVars:
+  FRONTEND_HOST_NAME:
+    value: "cases.civillegaladvice.service.gov.uk"
+  EXPRESS_SERVER_HOST:
+    value: "http://cla-frontend-socket-server.laa-cla-frontend-production.svc.cluster.local"
+  EXPRESS_SERVER_PORT:
+    value: "80"
+  SOCKETIO_SERVER_URL:
+    value: "/socket.io"
+  DB_HOST:
+    secret:
+      name: database-14
+      key: host
+  DB_PORT:
+    secret:
+      name: database-14
+      key: port
+      optional: true
+  DB_NAME:
+    secret:
+      name: database-14
+      key: name
+  DB_USER:
+    secret:
+      name: database-14
+      key: user
+  DB_PASSWORD:
+    secret:
+      name: database-14
+      key: password
+  REPLICA_DB_HOST:
+    secret:
+      name: database-14
+      key: replica_host
+  SECRET_KEY:
+    secret:
+      name: secret
+      key: value
+  ADMIN_USER:
+    secret:
+      name: admin
+      key: user
+  ADMIN_PASSWORD:
+    secret:
+      name: admin
+      key: password
+  SENTRY_DSN:
+    secret:
+      name: sentry
+      key: dsn
+  DIVERSITY_PUBLIC_KEY:
+    secret:
+      name: diversity-keys
+      key: public
+  DIVERSITY_PRIVATE_KEY:
+    secret:
+      name: diversity-keys
+      key: private
+  PREVIOUS_DIVERSITY_PRIVATE_KEY:
+    secret:
+      name: previous-diversity-keys
+      key: private
+  ADMIN_ENABLED:
+    value: "True"
+  BACKEND_ENABLED:
+    value: "True"
+  SQS_REGION:
+    value: "eu-west-2"
+  OBIEE_EMAIL_TO:
+    secret:
+      name: obiee
+      key: email
+  OBIEE_ZIP_PASSWORD:
+    secret:
+      name: obiee
+      key: password
+  STATIC_FILES_BACKEND:
+    value: s3
+  AWS_REPORTS_STORAGE_BUCKET_NAME:
+    secret:
+      name: s3
+      key: reports_bucket_name
+  AWS_STATIC_FILES_STORAGE_BUCKET_NAME:
+    secret:
+      name: s3
+      key: static_files_bucket_name
+  AWS_DELETED_OBJECTS_BUCKET_NAME:
+    secret:
+      name: s3
+      key: deleted_objects_bucket_name
+  AWS_S3_REGION_NAME:
+    value: "eu-west-2"
+  AWS_S3_HOST:
+    value: "s3.eu-west-2.amazonaws.com"
+  S3_USE_SIGV4:
+    value: "True"
+  BOTO_ENDPOINTS:
+    value: "/home/app/boto_endpoints.json"
+  CELERY_PREDEFINED_QUEUE_URL:
+    secret:
+      name: sqs
+      key: sqs_id
+  SHOW_NEW_CB1:
+    configmap:
+      name: show-new-cb1
+      key: showing
+      optional: true
+  MAINTENANCE_MODE:
+    configmap:
+      name: maintenance-mode
+      key: "value"
+      optional: true
+  JULY_EDUCATION:
+    configmap:
+      name: july-education
+      key: "value"
+      optional: true
+  MIGRATE_OAUTH_DATA:
+    value: "True"
+  EMAIL_ORCHESTRATOR_URL:
+    configmap:
+      name: notify-orchestrator
+      key: url
+      optional: true
+  CFE_HOST:
+    value: "http://cfe-civil.cfe-civil-production.svc.cluster.local"
+  EDUCATION_ALLOCATION_FEATURE_FLAG:
+    configmap:
+      name: education-allocation
+      key: enabled
+      optional: true
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
